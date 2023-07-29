@@ -9,6 +9,7 @@ import {
 	getTransactionsSuccess,
 } from 'reducers/transactionReducer';
 import { closeDrawer } from 'reducers/drawerReducer';
+import { openSnackbar } from 'reducers/snackbarReducer';
 
 import { CREATE_TRANSACTION, GET_TRANSACTIONS } from 'actions/transactionActionTypes';
 
@@ -26,13 +27,19 @@ function* getTransactionsSaga(action) {
 function* createTransaction(action) {
 	try {
 		yield put(createTransactionLoading());
+
 		const res = yield call(addTransaction, action.payload);
 
 		if (res.id) {
-			yield all([put(createTransactionSuccess(action.payload)), put(closeDrawer())]);
+			yield put(createTransactionSuccess(action.payload));
+			yield put(closeDrawer());
+			yield put(
+				openSnackbar({ severity: 'success', msg: 'Transaction created successfully' })
+			);
 		}
 	} catch (error) {
-		yield put(createTransactionError());
+		yield put(createTransactionError(error.message));
+		yield put(openSnackbar({ severity: 'error', msg: error.message }));
 	}
 }
 
