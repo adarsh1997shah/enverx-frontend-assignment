@@ -1,17 +1,24 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Box, Button, Container, Drawer, Typography } from '@mui/material';
 
 import AddTransactionForm from './components/addTransactionForm';
+import { closeDrawer, openDrawer } from 'reducers/drawerReducer';
+import { useDispatch, useSelector } from 'react-redux';
 
 function Home() {
-	const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+	const dispatch = useDispatch();
+	const { isOpen } = useSelector(({ drawer }) => drawer);
 
 	const handleDrawerToggle = (value) => (event) => {
 		if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
 			return;
 		}
 
-		setIsDrawerOpen(value);
+		if (value) {
+			dispatch(openDrawer());
+		} else {
+			dispatch(closeDrawer());
+		}
 	};
 
 	return (
@@ -27,12 +34,12 @@ function Home() {
 
 				<Drawer
 					anchor="right"
-					open={isDrawerOpen}
+					open={isOpen}
 					onClose={handleDrawerToggle(false)}
 					sx={{
 						'& .MuiDrawer-paper': {
 							boxSizing: 'border-box',
-							width: { xs: '90%', md: '45%' },
+							width: { xs: '90%', sm: '55%', md: '45%', lg: '30%' },
 							p: 2,
 						},
 					}}>

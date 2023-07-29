@@ -1,12 +1,16 @@
-import { call, put, takeLatest } from 'redux-saga/effects';
+import { all, call, put, takeLatest } from 'redux-saga/effects';
 
 import {
+	createTransactionError,
+	createTransactionLoading,
+	createTransactionSuccess,
 	getTransactionsError,
 	getTransactionsLoading,
 	getTransactionsSuccess,
 } from 'reducers/transactionReducer';
+import { closeDrawer } from 'reducers/drawerReducer';
 
-import { GET_TRANSACTIONS } from 'actions/transactionActionTypes';
+import { CREATE_TRANSACTION, GET_TRANSACTIONS } from 'actions/transactionActionTypes';
 
 function* getTransactionsSaga(action) {
 	try {
@@ -18,7 +22,19 @@ function* getTransactionsSaga(action) {
 	}
 }
 
+function* createTransaction(action) {
+	try {
+		yield put(createTransactionLoading());
+		yield all([put(createTransactionSuccess(action.payload)), put(closeDrawer())]);
+	} catch (error) {
+		yield put(createTransactionError());
+	}
+}
+
 // Generator function
 export function* watchGetTransactions() {
-	yield takeLatest(GET_TRANSACTIONS, getTransactionsSaga);
+	yield all([
+		takeLatest(GET_TRANSACTIONS, getTransactionsSaga),
+		takeLatest(CREATE_TRANSACTION, createTransaction),
+	]);
 }
