@@ -2,8 +2,11 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { ConfirmProvider } from 'material-ui-confirm';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 import CustomSnackbar from 'common/components/CustomSnackbar';
+import CustomDrawer from 'common/components/CustomDrawer';
 
 import store from 'store';
 
@@ -15,10 +18,13 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
 	<React.StrictMode>
 		<Provider store={store}>
-			<CustomSnackbar />
-			<ConfirmProvider>
-				<App />
-			</ConfirmProvider>
+			<LocalizationProvider dateAdapter={AdapterDayjs}>
+				<CustomSnackbar />
+				<CustomDrawer />
+				<ConfirmProvider>
+					<App />
+				</ConfirmProvider>
+			</LocalizationProvider>
 		</Provider>
 	</React.StrictMode>
 );

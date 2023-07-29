@@ -12,10 +12,10 @@ import {
 	Select,
 	TextField,
 } from '@mui/material';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { DatePicker } from '@mui/x-date-pickers';
 
-import { CREATE_TRANSACTION } from 'actions/transactionActionTypes';
+import { CREATE_TRANSACTION, EDIT_TRANSACTION } from 'actions/transactionActionTypes';
 
 import { closeDrawer } from 'reducers/drawerReducer';
 
@@ -26,6 +26,9 @@ function AddTransactionForm({ editTransaction }) {
 	const [transaction, setTransaction] = useState(editTransaction || INITIAL_TRANSACTION);
 
 	const dispatch = useDispatch();
+	const { isTransactionEditCreateLoading } = useSelector(
+		({ transactions }) => transactions
+	);
 
 	const { transactionType, category, date, amount, description } = transaction;
 
@@ -52,13 +55,21 @@ function AddTransactionForm({ editTransaction }) {
 	};
 
 	const handleSave = () => {
-		dispatch({ type: CREATE_TRANSACTION, payload: transaction });
+		if (editTransaction?.id) {
+			dispatch({ type: EDIT_TRANSACTION, payload: transaction });
+		} else {
+			dispatch({ type: CREATE_TRANSACTION, payload: transaction });
+		}
 	};
 
 	return (
 		<>
 			<Box>
-				<FormControl margin="normal" fullWidth required>
+				<FormControl
+					margin="normal"
+					fullWidth
+					required
+					disabled={isTransactionEditCreateLoading}>
 					<FormLabel id="demo-radio-buttons-group-label">Transaction Type</FormLabel>
 					<RadioGroup
 						name="transactionType"
@@ -69,7 +80,12 @@ function AddTransactionForm({ editTransaction }) {
 					</RadioGroup>
 				</FormControl>
 
-				<FormControl margin="normal" fullWidth variant="standard" required>
+				<FormControl
+					margin="normal"
+					fullWidth
+					variant="standard"
+					required
+					disabled={isTransactionEditCreateLoading}>
 					<InputLabel>Select Category</InputLabel>
 					<Select name="category" onChange={handleFormChange} value={category}>
 						{CATEGORY_OPTIONS[transactionType].map(({ value, label }) => (
@@ -90,6 +106,7 @@ function AddTransactionForm({ editTransaction }) {
 					disableFuture
 					format="DD-MM-YYYY"
 					onChange={handleDateChange}
+					disabled={isTransactionEditCreateLoading}
 				/>
 
 				<TextField
@@ -101,6 +118,7 @@ function AddTransactionForm({ editTransaction }) {
 					required
 					onChange={handleAmount}
 					value={amount ? `₹ ${amount}` : ''}
+					disabled={isTransactionEditCreateLoading}
 				/>
 
 				<TextField
@@ -114,6 +132,7 @@ function AddTransactionForm({ editTransaction }) {
 					required
 					onChange={handleFormChange}
 					value={description}
+					disabled={isTransactionEditCreateLoading}
 				/>
 			</Box>
 
@@ -126,7 +145,7 @@ function AddTransactionForm({ editTransaction }) {
 				</Button>
 				<Button
 					variant="contained"
-					disabled={shouldNotSubmitForm(transaction)}
+					disabled={isTransactionEditCreateLoading || shouldNotSubmitForm(transaction)}
 					onClick={handleSave}>
 					Save
 				</Button>

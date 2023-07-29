@@ -15,8 +15,6 @@ import { useDispatch } from 'react-redux';
 import CallMadeIcon from '@mui/icons-material/CallMade';
 import CallReceivedIcon from '@mui/icons-material/CallReceived';
 
-import CustomDrawer from 'common/components/CustomDrawer';
-
 import { openDrawer } from 'reducers/drawerReducer';
 
 import { getCategoryLabel } from 'pages/home/components/transactions/utils';
@@ -30,7 +28,9 @@ function Transaction({ transaction, index }) {
 	const confirm = useConfirm();
 
 	const handleEditTransaction = () => {
-		dispatch(openDrawer());
+		dispatch(
+			openDrawer({ component: <AddTransactionForm editTransaction={transaction} /> })
+		);
 	};
 
 	const handleTransactionDelete = () => {
@@ -85,10 +85,6 @@ function Transaction({ transaction, index }) {
 				<Button size="small" onClick={handleTransactionDelete}>
 					Delete
 				</Button>
-
-				<CustomDrawer>
-					<AddTransactionForm editTransaction={transaction} />
-				</CustomDrawer>
 			</CardActions>
 		</Card>
 	);

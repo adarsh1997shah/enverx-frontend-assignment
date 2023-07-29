@@ -1,6 +1,4 @@
 import React from 'react';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 import NavBar from 'common/components/Navbar';
 
@@ -11,9 +9,7 @@ function App() {
 		<div className="App">
 			<NavBar />
 
-			<LocalizationProvider dateAdapter={AdapterDayjs}>
-				<Home />
-			</LocalizationProvider>
+			<Home />
 		</div>
 	);
 }

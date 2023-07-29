@@ -2,29 +2,25 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Drawer } from '@mui/material';
 
-import { closeDrawer, openDrawer } from 'reducers/drawerReducer';
+import { closeDrawer } from 'reducers/drawerReducer';
 
-function CustomDrawer({ children }) {
+function CustomDrawer() {
 	const dispatch = useDispatch();
-	const { isOpen } = useSelector(({ drawer }) => drawer);
+	const { isOpen = false, children = null } = useSelector(({ drawer }) => drawer);
 
-	const handleDrawerToggle = (value) => (event) => {
+	const handleDrawerClose = (event) => {
 		if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
 			return;
 		}
 
-		if (value) {
-			dispatch(openDrawer());
-		} else {
-			dispatch(closeDrawer());
-		}
+		dispatch(closeDrawer());
 	};
 
 	return (
 		<Drawer
 			anchor="right"
 			open={isOpen}
-			onClose={handleDrawerToggle(false)}
+			onClose={handleDrawerClose}
 			sx={{
 				'& .MuiDrawer-paper': {
 					boxSizing: 'border-box',

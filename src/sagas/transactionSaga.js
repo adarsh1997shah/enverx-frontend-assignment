@@ -4,6 +4,9 @@ import {
 	createTransactionError,
 	createTransactionLoading,
 	createTransactionSuccess,
+	editTransactionError,
+	editTransactionLoading,
+	editTransactionSuccess,
 	getTransactionsError,
 	getTransactionsLoading,
 	getTransactionsSuccess,
@@ -11,9 +14,17 @@ import {
 import { closeDrawer } from 'reducers/drawerReducer';
 import { openSnackbar } from 'reducers/snackbarReducer';
 
-import { CREATE_TRANSACTION, GET_TRANSACTIONS } from 'actions/transactionActionTypes';
+import {
+	CREATE_TRANSACTION,
+	EDIT_TRANSACTION,
+	GET_TRANSACTIONS,
+} from 'actions/transactionActionTypes';
 
-import { addTransaction, fetchTransactions } from 'services/transaction';
+import {
+	addTransaction,
+	fetchTransactions,
+	updateTransaction,
+} from 'services/transaction';
 
 function* getTransactionsSaga(action) {
 	try {
@@ -49,10 +60,28 @@ function* createTransaction(action) {
 	}
 }
 
+function* editTransaction(action) {
+	try {
+		yield put(editTransactionLoading());
+
+		yield call(updateTransaction, action.payload);
+
+		yield put(editTransactionSuccess(action.payload));
+		yield put(closeDrawer());
+		yield put(
+			openSnackbar({ severity: 'success', msg: 'Transaction updated successfully' })
+		);
+	} catch (error) {
+		yield put(editTransactionError(error.message));
+		yield put(openSnackbar({ severity: 'error', msg: error.message }));
+	}
+}
+
 // Generator function
 export function* watchGetTransactions() {
 	yield all([
 		takeLatest(GET_TRANSACTIONS, getTransactionsSaga),
 		takeLatest(CREATE_TRANSACTION, createTransaction),
+		takeLatest(EDIT_TRANSACTION, editTransaction),
 	]);
 }

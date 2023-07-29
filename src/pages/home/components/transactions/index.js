@@ -9,13 +9,13 @@ import Transaction from './components/Transaction';
 
 function Transactions() {
 	const dispatch = useDispatch();
-	const { data, isLoading } = useSelector(({ transactions }) => transactions);
+	const { data, isTransactionsLoading } = useSelector(({ transactions }) => transactions);
 
 	useEffect(() => {
 		dispatch({ type: GET_TRANSACTIONS });
 	}, []);
 
-	if (isLoading) {
+	if (isTransactionsLoading) {
 		return (
 			<Box
 				display="flex"

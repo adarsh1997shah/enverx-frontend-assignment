@@ -4,13 +4,15 @@ import { Box, Button, Container, Grid, Typography } from '@mui/material';
 
 import { openDrawer } from 'reducers/drawerReducer';
 
-import CustomDrawer from 'common/components/CustomDrawer';
-
 import AddTransactionForm from './components/addTransactionForm';
 import Transactions from './components/transactions';
 
 function Home() {
 	const dispatch = useDispatch();
+
+	const handleAddTransaction = () => {
+		dispatch(openDrawer({ component: <AddTransactionForm /> }));
+	};
 
 	return (
 		<Container maxWidth="lg">
@@ -29,14 +31,10 @@ function Home() {
 					<Box>
 						<Button
 							variant="contained"
-							onClick={() => dispatch(openDrawer())}
+							onClick={handleAddTransaction}
 							sx={{ width: { xs: '100%', md: 'auto' } }}>
 							Add Transaction
 						</Button>
-
-						<CustomDrawer>
-							<AddTransactionForm />
-						</CustomDrawer>
 					</Box>
 				</Grid>
 
