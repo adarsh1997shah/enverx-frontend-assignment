@@ -1,27 +1,16 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Box, Button, Container, Drawer, Grid, Typography } from '@mui/material';
+import { useDispatch } from 'react-redux';
+import { Box, Button, Container, Grid, Typography } from '@mui/material';
 
-import { closeDrawer, openDrawer } from 'reducers/drawerReducer';
+import { openDrawer } from 'reducers/drawerReducer';
+
+import CustomDrawer from 'common/components/CustomDrawer';
 
 import AddTransactionForm from './components/addTransactionForm';
 import Transactions from './components/transactions';
 
 function Home() {
 	const dispatch = useDispatch();
-	const { isOpen } = useSelector(({ drawer }) => drawer);
-
-	const handleDrawerToggle = (value) => (event) => {
-		if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
-			return;
-		}
-
-		if (value) {
-			dispatch(openDrawer());
-		} else {
-			dispatch(closeDrawer());
-		}
-	};
 
 	return (
 		<Container maxWidth="lg">
@@ -40,24 +29,14 @@ function Home() {
 					<Box>
 						<Button
 							variant="contained"
-							onClick={handleDrawerToggle(true)}
+							onClick={() => dispatch(openDrawer())}
 							sx={{ width: { xs: '100%', md: 'auto' } }}>
 							Add Transaction
 						</Button>
 
-						<Drawer
-							anchor="right"
-							open={isOpen}
-							onClose={handleDrawerToggle(false)}
-							sx={{
-								'& .MuiDrawer-paper': {
-									boxSizing: 'border-box',
-									width: { xs: '90%', sm: '55%', md: '45%', lg: '30%' },
-									p: 2,
-								},
-							}}>
-							<AddTransactionForm handleDrawerToggle={handleDrawerToggle} />
-						</Drawer>
+						<CustomDrawer>
+							<AddTransactionForm />
+						</CustomDrawer>
 					</Box>
 				</Grid>
 

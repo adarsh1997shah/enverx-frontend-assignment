@@ -25,7 +25,11 @@ function Transactions() {
 	return (
 		<Box>
 			{data.map((transaction, index) => (
-				<Transaction transaction={transaction} index={index} />
+				<Transaction
+					key={transaction.date.valueOf()}
+					transaction={transaction}
+					index={index}
+				/>
 			))}
 		</Box>
 	);

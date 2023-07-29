@@ -17,11 +17,13 @@ import { DatePicker } from '@mui/x-date-pickers';
 
 import { CREATE_TRANSACTION } from 'actions/transactionActionTypes';
 
+import { closeDrawer } from 'reducers/drawerReducer';
+
 import { CATEGORY_OPTIONS, INITIAL_TRANSACTION } from './constants';
 import { shouldNotSubmitForm } from './utils';
 
-function AddTransactionForm({ handleDrawerToggle }) {
-	const [transaction, setTransaction] = useState(INITIAL_TRANSACTION);
+function AddTransactionForm({ editTransaction }) {
+	const [transaction, setTransaction] = useState(editTransaction || INITIAL_TRANSACTION);
 
 	const dispatch = useDispatch();
 
@@ -119,7 +121,7 @@ function AddTransactionForm({ handleDrawerToggle }) {
 				<Button
 					variant="outlined"
 					sx={{ mr: 1, my: 2 }}
-					onClick={handleDrawerToggle(false)}>
+					onClick={() => dispatch(closeDrawer())}>
 					Cancel
 				</Button>
 				<Button

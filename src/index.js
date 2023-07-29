@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
+import { ConfirmProvider } from 'material-ui-confirm';
 
 import './index.css';
 import App from './App';
@@ -11,7 +12,9 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
 	<React.StrictMode>
 		<Provider store={store}>
-			<App />
+			<ConfirmProvider>
+				<App />
+			</ConfirmProvider>
 		</Provider>
 	</React.StrictMode>
 );
