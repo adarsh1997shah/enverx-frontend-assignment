@@ -6,7 +6,6 @@ import {
 	CardActions,
 	CardContent,
 	CardHeader,
-	Drawer,
 	Typography,
 } from '@mui/material';
 import { useConfirm } from 'material-ui-confirm';

@@ -12,10 +12,11 @@ import { closeDrawer } from 'reducers/drawerReducer';
 
 import { CREATE_TRANSACTION, GET_TRANSACTIONS } from 'actions/transactionActionTypes';
 
+import { addTransaction } from 'services/transaction';
+
 function* getTransactionsSaga(action) {
 	try {
 		yield put(getTransactionsLoading());
-		// DO fetch call.
 		yield put(getTransactionsSuccess());
 	} catch (error) {
 		yield put(getTransactionsError(error));
@@ -25,7 +26,11 @@ function* getTransactionsSaga(action) {
 function* createTransaction(action) {
 	try {
 		yield put(createTransactionLoading());
-		yield all([put(createTransactionSuccess(action.payload)), put(closeDrawer())]);
+		const res = yield call(addTransaction, action.payload);
+
+		if (res.id) {
+			yield all([put(createTransactionSuccess(action.payload)), put(closeDrawer())]);
+		}
 	} catch (error) {
 		yield put(createTransactionError());
 	}
