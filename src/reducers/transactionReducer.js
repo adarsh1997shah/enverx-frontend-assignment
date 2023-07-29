@@ -1,11 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-	transactions: {
-		isLoading: false,
-		data: [],
-		error: '',
-	},
+	isLoading: false,
+	data: [],
+	error: '',
 };
 
 export const transactionsSlice = createSlice({
@@ -22,7 +20,7 @@ export const transactionsSlice = createSlice({
 			state.error = '';
 		},
 		createTransactionSuccess: (state, action) => {
-			state.transactions.push(action.payload);
+			state.data.push(action.payload);
 			state.isLoading = false;
 		},
 		createTransactionError: (state, action) => {

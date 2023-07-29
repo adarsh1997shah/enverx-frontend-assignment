@@ -16,3 +16,8 @@ export const CATEGORY_OPTIONS = {
 	],
 	income: [{ value: 'salary', label: 'Salary' }],
 };
+
+export const TRANSACTION_TYPES = [
+	{ label: 'Expense', value: 'expense' },
+	{ label: 'Income', value: 'income' },
+];
