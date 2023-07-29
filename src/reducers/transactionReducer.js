@@ -4,6 +4,8 @@ import dayjs from 'dayjs';
 const initialState = {
 	isTransactionsLoading: false,
 	isTransactionEditCreateLoading: false,
+	isDeleteTransactionLoading: false,
+	deleteTransaction: null,
 	data: [],
 	error: '',
 };
@@ -13,16 +15,21 @@ export const transactionsSlice = createSlice({
 	initialState,
 	reducers: {
 		// Get transactions.
-		getTransactionsLoading: (state, action) => {
+		getTransactionsLoading: (state) => {
 			state.error = '';
 			state.isTransactionsLoading = true;
 		},
 		getTransactionsSuccess: (state, action) => {
-			const transactions = action.payload.docs.map((doc) => {
-				const { date, ...rest } = doc.data();
+			const transactions = action.payload.docs
+				.filter((doc) => {
+					// Doing soft delete, so filter out the items with the key.
+					return !doc.data().isDeleted;
+				})
+				.map((doc) => {
+					const { date, ...rest } = doc.data();
 
-				return { ...rest, date: dayjs(date), id: doc.id };
-			});
+					return { ...rest, date: dayjs(date), id: doc.id };
+				});
 
 			state.data = transactions;
 			state.isTransactionsLoading = false;
@@ -65,6 +72,22 @@ export const transactionsSlice = createSlice({
 			state.error = action.payload;
 			state.isTransactionEditCreateLoading = false;
 		},
+		// Delete transaction.
+		deleteTransactionLoading: (state, action) => {
+			state.error = '';
+			state.isDeleteTransactionLoading = true;
+			state.deleteTransaction = action.payload;
+		},
+		deleteTransactionSuccess: (state, action) => {
+			const { payload } = action;
+
+			state.data = state.data.filter((item) => item.id !== payload.id);
+			state.isDeleteTransactionLoading = false;
+		},
+		deleteTransactionError: (state, action) => {
+			state.error = action.payload;
+			state.isDeleteTransactionLoading = false;
+		},
 	},
 });
 
@@ -78,6 +101,9 @@ export const {
 	editTransactionLoading,
 	editTransactionSuccess,
 	editTransactionError,
+	deleteTransactionLoading,
+	deleteTransactionSuccess,
+	deleteTransactionError,
 } = transactionsSlice.actions;
 
 export default transactionsSlice.reducer;

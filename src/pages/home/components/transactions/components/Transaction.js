@@ -10,12 +10,14 @@ import {
 } from '@mui/material';
 import { useConfirm } from 'material-ui-confirm';
 import { blue } from '@mui/material/colors';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import CallMadeIcon from '@mui/icons-material/CallMade';
 import CallReceivedIcon from '@mui/icons-material/CallReceived';
 
 import { openDrawer } from 'reducers/drawerReducer';
+
+import { DELETE_TRANSACTION } from 'actions/transactionActionTypes';
 
 import { getCategoryLabel } from 'pages/home/components/transactions/utils';
 import AddTransactionForm from 'pages/home/components/addTransactionForm';
@@ -24,8 +26,10 @@ function Transaction({ transaction, index }) {
 	const { transactionType, category, date, amount, description } = transaction;
 
 	const dispatch = useDispatch();
-
 	const confirm = useConfirm();
+	const { isDeleteTransactionLoading, deleteTransaction } = useSelector(
+		({ transactions }) => transactions
+	);
 
 	const handleEditTransaction = () => {
 		dispatch(
@@ -36,7 +40,7 @@ function Transaction({ transaction, index }) {
 	const handleTransactionDelete = () => {
 		confirm({ description: 'You want to delete this transaction ?' })
 			.then(() => {
-				/* ... */
+				dispatch({ type: DELETE_TRANSACTION, payload: transaction });
 			})
 			.catch(() => {
 				/* ... */
@@ -79,10 +83,20 @@ function Transaction({ transaction, index }) {
 			</CardContent>
 
 			<CardActions>
-				<Button size="small" onClick={handleEditTransaction}>
+				<Button
+					size="small"
+					onClick={handleEditTransaction}
+					disabled={
+						deleteTransaction?.id === transaction.id ? isDeleteTransactionLoading : false
+					}>
 					Edit
 				</Button>
-				<Button size="small" onClick={handleTransactionDelete}>
+				<Button
+					size="small"
+					onClick={handleTransactionDelete}
+					disabled={
+						deleteTransaction?.id === transaction.id ? isDeleteTransactionLoading : false
+					}>
 					Delete
 				</Button>
 			</CardActions>

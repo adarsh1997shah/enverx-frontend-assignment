@@ -1,4 +1,11 @@
-import { addDoc, collection, doc, getDocs, setDoc } from 'firebase/firestore/lite';
+import {
+	addDoc,
+	collection,
+	doc,
+	getDocs,
+	setDoc,
+	updateDoc,
+} from 'firebase/firestore/lite';
 import { db } from 'firebaseConfig';
 
 const TRANSACTIONS = 'transactions';
@@ -19,4 +26,14 @@ export function updateTransaction(transaction) {
 	const transactionRef = doc(db, TRANSACTIONS, id);
 
 	return setDoc(transactionRef, { ...rest, date: date.valueOf() });
+}
+
+export function removeTransaction(transaction) {
+	const { id } = transaction;
+
+	const transactionRef = doc(db, TRANSACTIONS, id);
+
+	return updateDoc(transactionRef, {
+		isDeleted: true,
+	});
 }

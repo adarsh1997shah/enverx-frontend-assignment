@@ -4,6 +4,9 @@ import {
 	createTransactionError,
 	createTransactionLoading,
 	createTransactionSuccess,
+	deleteTransactionError,
+	deleteTransactionLoading,
+	deleteTransactionSuccess,
 	editTransactionError,
 	editTransactionLoading,
 	editTransactionSuccess,
@@ -16,6 +19,7 @@ import { openSnackbar } from 'reducers/snackbarReducer';
 
 import {
 	CREATE_TRANSACTION,
+	DELETE_TRANSACTION,
 	EDIT_TRANSACTION,
 	GET_TRANSACTIONS,
 } from 'actions/transactionActionTypes';
@@ -23,6 +27,7 @@ import {
 import {
 	addTransaction,
 	fetchTransactions,
+	removeTransaction,
 	updateTransaction,
 } from 'services/transaction';
 
@@ -77,11 +82,29 @@ function* editTransaction(action) {
 	}
 }
 
+function* deleteTransaction(action) {
+	try {
+		yield put(deleteTransactionLoading(action.payload));
+
+		const test = yield call(removeTransaction, action.payload);
+		console.log('test', test);
+
+		yield put(deleteTransactionSuccess(action.payload));
+		yield put(
+			openSnackbar({ severity: 'success', msg: 'Transaction deleted successfully' })
+		);
+	} catch (error) {
+		yield put(deleteTransactionError(error.message));
+		yield put(openSnackbar({ severity: 'error', msg: error.message }));
+	}
+}
+
 // Generator function
 export function* watchGetTransactions() {
 	yield all([
 		takeLatest(GET_TRANSACTIONS, getTransactionsSaga),
 		takeLatest(CREATE_TRANSACTION, createTransaction),
 		takeLatest(EDIT_TRANSACTION, editTransaction),
+		takeLatest(DELETE_TRANSACTION, deleteTransaction),
 	]);
 }
