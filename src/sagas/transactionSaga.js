@@ -13,14 +13,20 @@ import { openSnackbar } from 'reducers/snackbarReducer';
 
 import { CREATE_TRANSACTION, GET_TRANSACTIONS } from 'actions/transactionActionTypes';
 
-import { addTransaction } from 'services/transaction';
+import { addTransaction, fetchTransactions } from 'services/transaction';
 
 function* getTransactionsSaga(action) {
 	try {
 		yield put(getTransactionsLoading());
-		yield put(getTransactionsSuccess());
+
+		const res = yield call(fetchTransactions);
+
+		if (res?.size > 0) {
+			yield put(getTransactionsSuccess(res));
+		}
 	} catch (error) {
 		yield put(getTransactionsError(error));
+		yield put(openSnackbar({ severity: 'error', msg: error.message }));
 	}
 }
 
@@ -31,7 +37,7 @@ function* createTransaction(action) {
 		const res = yield call(addTransaction, action.payload);
 
 		if (res.id) {
-			yield put(createTransactionSuccess(action.payload));
+			yield put(createTransactionSuccess({ ...action.payload, id: res.id }));
 			yield put(closeDrawer());
 			yield put(
 				openSnackbar({ severity: 'success', msg: 'Transaction created successfully' })
