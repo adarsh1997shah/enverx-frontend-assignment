@@ -9,7 +9,7 @@ function NavBar() {
 		<Box sx={{ flexGrow: 1 }}>
 			<AppBar position="static">
 				<Toolbar>
-					<Typography variant="h4" component="div" sx={{ flexGrow: 1, px: 1.5, py: 3 }}>
+					<Typography variant="h5" component="div" sx={{ flexGrow: 1, px: 1.5, py: 3 }}>
 						Expense Tracker App
 					</Typography>
 				</Toolbar>

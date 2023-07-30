@@ -44,9 +44,14 @@ function Transactions() {
 	}
 
 	return (
-		<Box>
-			{data.map((transaction, index) => (
-				<Transaction key={transaction.id} transaction={transaction} index={index} />
+		<Box bgcolor={lime[100]} height="auto" p={1}>
+			{data.map((transaction, index, transactions) => (
+				<Transaction
+					key={transaction.id}
+					transaction={transaction}
+					index={index}
+					transactions={transactions}
+				/>
 			))}
 		</Box>
 	);

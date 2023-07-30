@@ -6,10 +6,10 @@ import {
 	CardActions,
 	CardContent,
 	CardHeader,
+	Chip,
 	Typography,
 } from '@mui/material';
 import { useConfirm } from 'material-ui-confirm';
-import { blue } from '@mui/material/colors';
 import { useDispatch, useSelector } from 'react-redux';
 
 import CallMadeIcon from '@mui/icons-material/CallMade';
@@ -22,7 +22,7 @@ import { DELETE_TRANSACTION } from 'actions/transactionActionTypes';
 import { getCategoryLabel } from 'pages/home/components/transactions/utils';
 import AddTransactionForm from 'pages/home/components/addTransactionForm';
 
-function Transaction({ transaction, index }) {
+function Transaction({ transaction, index, transactions }) {
 	const { transactionType, category, date, amount, description } = transaction;
 
 	const dispatch = useDispatch();
@@ -48,19 +48,27 @@ function Transaction({ transaction, index }) {
 	};
 
 	return (
-		<Card sx={{ my: 2, mt: index === 0 ? 0 : '', bgcolor: blue[50] }}>
+		<Card
+			sx={{
+				mt: index === 0 ? 0 : '',
+				mb: index === transactions.length - 1 ? '' : 1,
+			}}>
 			<CardHeader
 				sx={{ pb: 1 }}
 				title={
-					<Box display="flex" alignItems="center">
-						<Typography variant="h5" mr={1}>
-							₹ {new Intl.NumberFormat('en-IN').format(amount)}
-						</Typography>
-						{transactionType === 'expense' ? (
-							<CallMadeIcon color="error" fontSize="small" />
-						) : (
-							<CallReceivedIcon color="success" fontSize="small" />
-						)}
+					<Box display="flex" justifyContent="space-between">
+						<Box display="flex" alignItems="center">
+							<Typography variant="h5" mr={1}>
+								₹ {new Intl.NumberFormat('en-IN').format(amount)}
+							</Typography>
+							{transactionType === 'expense' ? (
+								<CallMadeIcon color="error" fontSize="small" />
+							) : (
+								<CallReceivedIcon color="success" fontSize="small" />
+							)}
+						</Box>
+
+						<Chip label={getCategoryLabel({ transactionType, category })} color="info" />
 					</Box>
 				}
 				subheader={date.format('DD MMM, YYYY')}
@@ -68,17 +76,9 @@ function Transaction({ transaction, index }) {
 
 			<CardContent sx={{ py: 0 }}>
 				<Box display="flex">
-					<Typography sx={{ width: 100 }} fontWeight="bold">
-						Category:
+					<Typography flex={1} variant="body2">
+						{description}
 					</Typography>
-					<Typography>{getCategoryLabel({ transactionType, category })}</Typography>
-				</Box>
-
-				<Box display="flex">
-					<Typography sx={{ width: 100 }} fontWeight="bold">
-						Description:
-					</Typography>
-					<Typography>{description}</Typography>
 				</Box>
 			</CardContent>
 

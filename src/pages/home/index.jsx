@@ -6,6 +6,7 @@ import { openDrawer } from 'reducers/drawerReducer';
 
 import AddTransactionForm from './components/addTransactionForm';
 import Transactions from './components/transactions';
+import Summary from './components/summary';
 
 function Home() {
 	const dispatch = useDispatch();
@@ -15,12 +16,12 @@ function Home() {
 	};
 
 	return (
-		<Container maxWidth="lg">
+		<Container maxWidth="xl">
 			<Grid container my={3}>
-				<Grid item xs={12} md={6}>
+				<Grid item xs={12} md={7}>
 					<Box mb={2}>
 						<Typography variant="h5" gutterBottom>
-							Track your transactions! 💸
+							Track your expense! 💸
 						</Typography>
 						<Typography variant="body1">
 							Keeping track of your expenses is an important part of managing your overall
@@ -36,14 +37,19 @@ function Home() {
 							Add Transaction
 						</Button>
 					</Box>
+
+					<Summary />
 				</Grid>
 
 				<Grid
 					item
 					xs={12}
-					md={6}
+					md={5}
 					px={{ md: 2 }}
-					sx={{ minHeight: { md: '80vh' }, overflowY: { md: 'scroll' } }}>
+					sx={{
+						height: { md: '80vh' },
+						overflowY: { md: 'scroll' },
+					}}>
 					<Transactions />
 				</Grid>
 			</Grid>
