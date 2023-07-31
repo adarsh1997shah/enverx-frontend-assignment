@@ -13,7 +13,7 @@ function Transactions() {
 
 	useEffect(() => {
 		dispatch({ type: GET_TRANSACTIONS });
-	}, []);
+	}, [dispatch]);
 
 	if (isTransactionsLoading) {
 		return (
