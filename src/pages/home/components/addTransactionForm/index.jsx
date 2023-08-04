@@ -25,6 +25,7 @@ import { closeDrawer } from 'reducers/drawerReducer';
 
 import { INITIAL_TRANSACTION } from './constants';
 import { shouldNotSubmitForm } from './utils';
+import Amount from 'common/components/InputFields/Amount';
 
 function AddTransactionForm({ editTransaction }) {
 	const [transaction, setTransaction] = useState(editTransaction || INITIAL_TRANSACTION);
@@ -40,16 +41,6 @@ function AddTransactionForm({ editTransaction }) {
 		const { name, value } = e.target;
 
 		setTransaction({ ...transaction, [name]: value });
-	};
-
-	const handleAmount = (e) => {
-		const { value, name } = e.target;
-
-		const amountWithoutPrefix = value.trim().replace('₹ ', '');
-
-		if (!isNaN(amountWithoutPrefix)) {
-			handleFormChange({ target: { name, value: amountWithoutPrefix } });
-		}
 	};
 
 	const handleDateChange = (value) => {
@@ -123,16 +114,15 @@ function AddTransactionForm({ editTransaction }) {
 					disabled={isTransactionEditCreateLoading}
 				/>
 
-				<TextField
+				<Amount
 					label="Amount"
 					name="amount"
-					fullWidth
-					margin="normal"
 					variant="standard"
+					margin="normal"
+					fullWidth
 					required
-					onChange={handleAmount}
-					value={amount ? `₹ ${amount}` : ''}
-					disabled={isTransactionEditCreateLoading}
+					value={amount}
+					onChange={handleFormChange}
 				/>
 
 				<TextField
