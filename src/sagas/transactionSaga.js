@@ -86,8 +86,7 @@ function* deleteTransaction(action) {
 	try {
 		yield put(deleteTransactionLoading(action.payload));
 
-		const test = yield call(removeTransaction, action.payload);
-		console.log('test', test);
+		yield call(removeTransaction, action.payload);
 
 		yield put(deleteTransactionSuccess(action.payload));
 		yield put(

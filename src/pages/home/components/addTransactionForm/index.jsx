@@ -144,7 +144,8 @@ function AddTransactionForm({ editTransaction }) {
 				<Button
 					variant="outlined"
 					sx={{ mr: 1, my: 2 }}
-					onClick={() => dispatch(closeDrawer())}>
+					onClick={() => dispatch(closeDrawer())}
+					disabled={isTransactionEditCreateLoading}>
 					Cancel
 				</Button>
 				<Button

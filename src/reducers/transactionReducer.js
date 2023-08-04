@@ -32,6 +32,14 @@ export const transactionsSlice = createSlice({
 					return { ...rest, date: dayjs(date), id: doc.id };
 				});
 
+			// Sort on the basis of the recent transaction date.
+			transactions.sort((a, b) => {
+				const milliseconds1 = a.date.startOf('day').valueOf();
+				const milliseconds2 = b.date.startOf('day').valueOf();
+
+				return milliseconds2 - milliseconds1;
+			});
+
 			state.data = transactions;
 			state.filteredData = transactions;
 			state.isTransactionsLoading = false;
@@ -50,6 +58,7 @@ export const transactionsSlice = createSlice({
 		},
 		createTransactionSuccess: (state, action) => {
 			state.data.push(action.payload);
+			state.filteredData = state.data;
 			state.isTransactionEditCreateLoading = false;
 		},
 		createTransactionError: (state, action) => {
@@ -71,6 +80,7 @@ export const transactionsSlice = createSlice({
 
 				return item;
 			});
+			state.filteredData = state.data;
 			state.isTransactionEditCreateLoading = false;
 		},
 		editTransactionError: (state, action) => {
@@ -87,6 +97,7 @@ export const transactionsSlice = createSlice({
 			const { payload } = action;
 
 			state.data = state.data.filter((item) => item.id !== payload.id);
+			state.filteredData = state.data;
 			state.isDeleteTransactionLoading = false;
 		},
 		deleteTransactionError: (state, action) => {
