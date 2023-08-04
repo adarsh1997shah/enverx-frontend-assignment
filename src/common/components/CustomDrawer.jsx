@@ -4,12 +4,28 @@ import { Drawer } from '@mui/material';
 
 import { closeDrawer } from 'reducers/drawerReducer';
 
-function CustomDrawer() {
-	const dispatch = useDispatch();
-	const { isOpen = false, children = null } = useSelector(({ drawer }) => drawer);
+export const commonDrawerStyles = {
+	width: { xs: '100%', sm: 400 },
+	p: 2.5,
+	boxSizing: 'border-box',
+};
 
-	const handleDrawerClose = (event) => {
-		if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+function CustomDrawer({ shouldNotCloseOnBackdropClick = true }) {
+	const dispatch = useDispatch();
+	const {
+		isOpen = false,
+		children = null,
+		drawerProps = {},
+	} = useSelector(({ drawer }) => drawer);
+
+	const handleDrawerClose = (event, reason) => {
+		const { type, key } = event;
+		const keys = ['Tab', 'Shift', 'Escape'];
+
+		if (
+			(shouldNotCloseOnBackdropClick && reason === 'backdropClick') ||
+			(type === 'keydown' && keys.includes(key))
+		) {
 			return;
 		}
 
@@ -17,17 +33,7 @@ function CustomDrawer() {
 	};
 
 	return (
-		<Drawer
-			anchor="right"
-			open={isOpen}
-			onClose={handleDrawerClose}
-			sx={{
-				'& .MuiDrawer-paper': {
-					boxSizing: 'border-box',
-					width: { xs: '90%', sm: '55%', md: '45%', lg: '30%' },
-					p: 2,
-				},
-			}}>
+		<Drawer anchor="right" open={isOpen} onClose={handleDrawerClose} {...drawerProps}>
 			{children}
 		</Drawer>
 	);

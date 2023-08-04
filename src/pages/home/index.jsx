@@ -7,12 +7,17 @@ import { openDrawer } from 'reducers/drawerReducer';
 import AddTransactionForm from './components/addTransactionForm';
 import Transactions from './components/transactions';
 import Summary from './components/summary';
+import Filters from './components/filters';
 
 function Home() {
 	const dispatch = useDispatch();
 
 	const handleAddTransaction = () => {
 		dispatch(openDrawer({ component: <AddTransactionForm /> }));
+	};
+
+	const handleFilters = () => {
+		dispatch(openDrawer({ component: <Filters />, drawerProps: { anchor: 'left' } }));
 	};
 
 	return (
@@ -29,12 +34,19 @@ function Home() {
 						</Typography>
 					</Box>
 
-					<Box>
+					<Box display="flex" gap={1.5}>
 						<Button
 							variant="contained"
 							onClick={handleAddTransaction}
 							sx={{ width: { xs: '100%', md: 'auto' } }}>
 							Add Transaction
+						</Button>
+
+						<Button
+							variant="contained"
+							onClick={handleFilters}
+							sx={{ width: { xs: '100%', md: 'auto' } }}>
+							Apply Filters
 						</Button>
 					</Box>
 

@@ -15,11 +15,15 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { DatePicker } from '@mui/x-date-pickers';
 
+import { commonDrawerStyles } from 'common/components/CustomDrawer';
+
+import { CATEGORY_OPTIONS } from 'pages/home/constants';
+
 import { CREATE_TRANSACTION, EDIT_TRANSACTION } from 'actions/transactionActionTypes';
 
 import { closeDrawer } from 'reducers/drawerReducer';
 
-import { CATEGORY_OPTIONS, INITIAL_TRANSACTION } from './constants';
+import { INITIAL_TRANSACTION } from './constants';
 import { shouldNotSubmitForm } from './utils';
 
 function AddTransactionForm({ editTransaction }) {
@@ -62,8 +66,14 @@ function AddTransactionForm({ editTransaction }) {
 		}
 	};
 
+	const onSelectOptionClose = () => {
+		setTimeout(() => {
+			document.activeElement.blur();
+		}, 0);
+	};
+
 	return (
-		<>
+		<Box sx={commonDrawerStyles}>
 			<Box>
 				<FormControl
 					margin="normal"
@@ -87,7 +97,11 @@ function AddTransactionForm({ editTransaction }) {
 					required
 					disabled={isTransactionEditCreateLoading}>
 					<InputLabel>Select Category</InputLabel>
-					<Select name="category" onChange={handleFormChange} value={category}>
+					<Select
+						name="category"
+						onChange={handleFormChange}
+						value={category}
+						onClose={onSelectOptionClose}>
 						{CATEGORY_OPTIONS[transactionType].map(({ value, label }) => (
 							<MenuItem key={value} value={value}>
 								{label}
@@ -150,7 +164,7 @@ function AddTransactionForm({ editTransaction }) {
 					Save
 				</Button>
 			</Box>
-		</>
+		</Box>
 	);
 }
 

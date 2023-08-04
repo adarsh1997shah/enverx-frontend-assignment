@@ -7,6 +7,7 @@ const initialState = {
 	isDeleteTransactionLoading: false,
 	deleteTransaction: null,
 	data: [],
+	filteredData: [],
 	error: '',
 };
 
@@ -32,7 +33,11 @@ export const transactionsSlice = createSlice({
 				});
 
 			state.data = transactions;
+			state.filteredData = transactions;
 			state.isTransactionsLoading = false;
+		},
+		getFilteredTransactions: (state, action) => {
+			state.filteredData = action.payload || state.data;
 		},
 		getTransactionsError: (state, action) => {
 			state.error = action.payload;
@@ -94,6 +99,7 @@ export const transactionsSlice = createSlice({
 export const {
 	getTransactionsLoading,
 	getTransactionsSuccess,
+	getFilteredTransactions,
 	getTransactionsError,
 	createTransactionLoading,
 	createTransactionSuccess,

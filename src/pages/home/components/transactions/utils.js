@@ -1,7 +1,4 @@
-import {
-	CATEGORY_OPTIONS,
-	TRANSACTION_TYPES,
-} from 'pages/home/components/addTransactionForm/constants';
+import { CATEGORY_OPTIONS, TRANSACTION_TYPES } from 'pages/home/constants';
 
 export function getTransactionTypeLabel(transactionType) {
 	return TRANSACTION_TYPES.find(({ value }) => value === transactionType)?.label;

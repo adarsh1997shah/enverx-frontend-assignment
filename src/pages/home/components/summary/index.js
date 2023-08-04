@@ -4,7 +4,7 @@ import { Box, Card, CardHeader, Grid, Typography } from '@mui/material';
 import { green } from '@mui/material/colors';
 
 import { getCategoryLabel } from 'pages/home/components/transactions/utils';
-import { TRANSACTION_TYPES } from 'pages/home/components/addTransactionForm/constants';
+import { TRANSACTION_TYPES } from 'pages/home/constants';
 
 function Summary() {
 	const { data } = useSelector(({ transactions }) => transactions);

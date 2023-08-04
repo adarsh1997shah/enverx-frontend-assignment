@@ -9,7 +9,9 @@ import Transaction from './components/Transaction';
 
 function Transactions() {
 	const dispatch = useDispatch();
-	const { data, isTransactionsLoading } = useSelector(({ transactions }) => transactions);
+	const { filteredData, isTransactionsLoading } = useSelector(
+		({ transactions }) => transactions
+	);
 
 	useEffect(() => {
 		dispatch({ type: GET_TRANSACTIONS });
@@ -29,7 +31,7 @@ function Transactions() {
 		);
 	}
 
-	if (data.length === 0) {
+	if (filteredData.length === 0) {
 		return (
 			<Box
 				display="flex"
@@ -45,7 +47,7 @@ function Transactions() {
 
 	return (
 		<Box bgcolor={lime[100]} height="auto" p={1}>
-			{data.map((transaction, index, transactions) => (
+			{filteredData.map((transaction, index, transactions) => (
 				<Transaction
 					key={transaction.id}
 					transaction={transaction}
